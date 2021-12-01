@@ -1,4 +1,7 @@
 import axios from 'axios';
+import { InjectedConnector } from '@web3-react/injected-connector';
+import { WalletConnectConnector } from '@web3-react/walletconnect-connector';
+import { NetworkConnector } from '@web3-react/network-connector';
 
 interface Meta {
     title?: string;
@@ -63,6 +66,46 @@ async function siteLookup(url: string) {
     };
 }
 
+const formatAddress = (account: string|null|undefined) => {
+    const acc = account || '';
+    return acc.substring(0, 6) + '...' + acc.substring(acc.length - 4)
+};
+
+const SUPPORTED_CHAINS = {
+    Ropsten: 3,
+    Rinkeby: 4
+}
+const injected = new InjectedConnector({ supportedChainIds: Object.values(SUPPORTED_CHAINS) });
+
+const availableAddresses = {
+    [SUPPORTED_CHAINS.Ropsten]: '0xD208456A8aC709361Ca327B9329113aD3C0A9FD9',
+    [SUPPORTED_CHAINS.Rinkeby]: '0x9120b19e921fAf41d315B528dE711f99cf530725'
+}
+
+const walletconnect = new WalletConnectConnector({
+    rpc: {
+        [SUPPORTED_CHAINS.Ropsten]: 'https://ropsten.infura.io/v3/'+process.env.REACT_APP_INFURA_API_KEY,
+        [SUPPORTED_CHAINS.Rinkeby]: 'https://rinkeby.infura.io/v3/'+process.env.REACT_APP_INFURA_API_KEY,
+    },
+    infuraId: process.env.REACT_APP_INFURA_API_KEY,
+    supportedChainIds: Object.values(SUPPORTED_CHAINS),
+    qrcode: true
+});
+
+const network = new NetworkConnector({
+    urls: {
+        [SUPPORTED_CHAINS.Ropsten]: 'https://ropsten.infura.io/v3/'+process.env.REACT_APP_INFURA_API_KEY,
+        [SUPPORTED_CHAINS.Rinkeby]: 'https://rinkeby.infura.io/v3/'+process.env.REACT_APP_INFURA_API_KEY
+    },
+    defaultChainId: SUPPORTED_CHAINS.Rinkeby,
+});
+
 export {
-    siteLookup
+    siteLookup,
+    SUPPORTED_CHAINS,
+    injected,
+    walletconnect,
+    network,
+    availableAddresses,
+    formatAddress
 }
