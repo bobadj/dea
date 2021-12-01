@@ -1,0 +1,30 @@
+.userTransactions {
+    margin: -20px;
+    margin-bottom: -40px;
+}
+.userTransactions .title {
+    padding: 20px;
+    border-bottom: 1px solid #e5e5e5;
+}
+.userTransactions .title h3 {
+    margin: 0;
+    padding: 0;
+}
+.userTransactions .transactionsList {
+    padding: 20px;
+}
+.userTransactions .transactionDetails:first-child {
+    padding-top: 0 !important;
+}
+.transactionDetails {
+    display: flex;
+    justify-content: space-between;
+    align-content: center;
+    align-items: center;
+    border-bottom: 1px solid #e5e5e5;
+    padding: 15px 0;
+}
+.transactionDetails h3 {
+    margin: 0;
+    padding: 0;
+}

@@ -1,0 +1,44 @@
+.postHeader {
+    display: flex;
+    justify-content: space-between;
+}
+.postHeader img {
+    max-width: 50px;
+    border-radius: 50%;
+}
+.postHeader div.avatarContainer {
+    display: flex;
+}
+.postHeader div.avatarContainer div {
+    margin-left: 15px;
+}
+.postHeader a,
+.postHeader p {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    text-decoration: none;
+    color: inherit;
+}
+.postActions {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #e5e5e5;
+}
+.postActionContent {
+    display: flex;
+    justify-content: space-between;
+    width: 150px;
+}
+.postActionContent span {
+    margin-left: 8px;
+}
+svg,
+.postActionContent svg {
+    cursor: pointer;
+}
+.postCaption img {
+    max-width: 100%;
+    height: auto;
+    margin-top: 10px;
+}

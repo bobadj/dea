@@ -1,0 +1,27 @@
+.dropdownContainer {
+    position: relative;
+}
+.dropdown {
+    display: none;
+    position: absolute;
+    right: 0;
+    z-index: 999;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0,0,0,0.28);
+}
+.dropdown.visible {
+    display: block;
+}
+.dropdown ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.dropdown ul li {
+    font-size: 14px;
+    padding: 10px 15px;
+    cursor: pointer;
+}
+.dropdown ul li:hover {
+    background: #eee;
+}
