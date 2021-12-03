@@ -11,31 +11,6 @@ import Post from '../../components/Post';
 import ABI from '../../abis/Vibe.abi.json';
 import './index.css';
 
-const PostMockup = [
-    {
-        id: 1,
-        owner: 'bobadj.eth',
-        timestamp: 1638274995761,
-        content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam luctus hendrerit metus, ut ullamcorper quam finibus at. Etiam id magna sit amet...'
-    },
-    {
-        id: 2,
-        owner: '0x0b8768A1863C0A78a14ad75445f56393beaF5a2d',
-        timestamp: 1638274995761,
-        content: 'Lorem ipsum dolor sit amet, https://ethereum.org consectetur adipiscing elit. Aliquam luctus hendrerit metus, ut ullamcorper quam finibus at. Etiam id magna sit amet...'
-    },
-]
-
-const loadPosts = (num: number = 10) => {
-    return new Promise((resolve, rejects) => {
-        setTimeout(() => {
-            resolve(Array(num).fill('').map((_, i) => {
-                return PostMockup[i % 2];
-            }));
-        }, 2000);
-    });
-}
-
 export default function Feed() {
     const { chainId } = useWeb3React<Web3Provider>();
     const [ isLoading, setIsLoading ] = useState<boolean>(true);
@@ -55,20 +30,18 @@ export default function Feed() {
         if (!!contract) {
             let latestPostId = await fetchLastPostId();
             const currentPostLength = cleanup ? 0 : posts.length;
-            const from = cleanup ? 0 : +latestPostId - 1;
+            const from = cleanup ? 0 : currentPostLength;
             if (+latestPostId > currentPostLength-1) {
                 setIsLoading(true);
                 try {
-                    const posts = await contract.fetchPostsRanged(from, 10);
+                    const posts = await contract.fetchPostsRanged(from, 3);
                     setPosts((prevState => {
                         return cleanup ? posts : [...prevState, ...posts]
                     }));
                 } catch (e) {
                     console.error(e)
                 }
-                setTimeout(() => {
-                    setIsLoading(false);
-                }, 1500);
+                setIsLoading(false);
             }
         }
     }

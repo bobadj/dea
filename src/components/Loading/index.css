@@ -1,10 +1,10 @@
+/*DOTS*/
 .loadingContainer {
     width: 100%;
     display: flex;
     justify-content: center;
     padding: 20px 0;
 }
-
 .dotLoading {
     position: relative;
     width: 10px;
@@ -45,11 +45,49 @@
     100% { transform: translateX(0); }
     25% { transform: translateX(-15px); }
 }
-
 @keyframes dotCollisionAfter {
     0%,
     50%,
     75%,
     100% { transform: translateX(0); }
     25% { transform: translateX(15px); }
+}
+/*POST*/
+.postLoadingWrapper {
+    display: flex;
+}
+@keyframes placeHolderShimmer {
+    0% {
+        background-position: -468px 0;
+    }
+    100% {
+        background-position: 468px 0;
+    }
+}
+.postLoadingWrapper .image,
+.postLoadingWrapper .textLine {
+    animation-duration: 1.25s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: infinite;
+    animation-name: placeHolderShimmer;
+    animation-timing-function: linear;
+    background: #f6f6f6;
+    background: linear-gradient(to right, #f6f6f6 8%, #f0f0f0 18%, #f6f6f6 33%);
+    background-size: 800px 104px;
+    height: 96px;
+    position: relative;
+}
+.postLoadingWrapper .image {
+    border-radius: 50%;
+    height: 50px;
+    width: 50px;
+}
+.postLoadingWrapper .text {
+    width: 90%;
+    margin-left: 20px;
+}
+.postLoadingWrapper .textLine {
+    height: 20px;
+    width: 100%;
+    margin: 4px 0;
 }

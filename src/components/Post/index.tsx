@@ -9,11 +9,13 @@ import { formatAddress, siteLookup } from '../../utils'
 import Card from '../Card';
 import Avatar from '../Avatar';
 import './index.css';
+import Loading from "../Loading";
 
 const ContextInitialValues = {
     post: {
         id: 0,
         owner: '',
+        ownerEns: '',
         text: '',
         timestamp: 0
     }
@@ -53,29 +55,29 @@ function PostContent() {
     const { post: { text } } = usePostContext();
     const [ caption, setCaption ] = useState<Caption>({ url: undefined, image: null });
 
-    useEffect(() => {
-        const contentHasUri = () => (text || '').match(/(https?:\/\/[^ ]*)/g);
-        const getUriFromContent = () => {
-            const uris = (text || '').match(/(https?:\/\/[^ ]*)/g);
-            return uris ? uris[0] : '';
-        }
-        if (contentHasUri()) {
-            const getCaptionFromUrl = async () => {
-                try {
-                    const { og } = await siteLookup(getUriFromContent());
-                    if (!!og) {
-                        setCaption({
-                            image: og.image as string,
-                            url: getUriFromContent()
-                        });
-                    }
-                } catch (e) {
-                    console.error(e)
-                }
-            }
-            getCaptionFromUrl()
-        }
-    }, [])
+    // useEffect(() => {
+    //     const contentHasUri = () => (text || '').match(/(https?:\/\/[^ ]*)/g);
+    //     const getUriFromContent = () => {
+    //         const uris = (text || '').match(/(https?:\/\/[^ ]*)/g);
+    //         return uris ? uris[0] : '';
+    //     }
+    //     if (contentHasUri()) {
+    //         const getCaptionFromUrl = async () => {
+    //             try {
+    //                 const { og } = await siteLookup(getUriFromContent());
+    //                 if (!!og) {
+    //                     setCaption({
+    //                         image: og.image as string,
+    //                         url: getUriFromContent()
+    //                     });
+    //                 }
+    //             } catch (e) {
+    //                 console.error(e)
+    //             }
+    //         }
+    //         getCaptionFromUrl()
+    //     }
+    // }, [])
 
     return (
         <>
@@ -97,25 +99,8 @@ function PostContent() {
     );
 }
 function PostHeader() {
-    const { post: { timestamp, owner } } = usePostContext();
-    const { library } = useWeb3React<Web3Provider>();
+    const { post: { timestamp, owner, ownerEns } } = usePostContext();
     const [ dropdownVisible, setDropdownVisible ] = useState<boolean>(false);
-    const [ ens, setEns ] = useState<string|undefined|null>();
-
-    useEffect(() => {
-        const getEns = async () => {
-            if (!!library) {
-                try {
-                    const ens = await library.lookupAddress(owner);
-                    setEns(ens);
-                } catch (e) {
-                    console.error(e)
-                }
-            }
-        };
-
-        getEns();
-    })
 
     const formatTime = () => {
         const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -133,7 +118,7 @@ function PostHeader() {
             <div className="avatarContainer">
                 <Avatar seed={owner} />
                 <div>
-                    <a href={owner}><b>{ens ?? formatAddress(owner)}</b></a>
+                    <a href={owner}><b>{ownerEns}</b></a>
                     <small>{formatTime()}</small>
                 </div>
             </div>
@@ -154,20 +139,51 @@ interface PostProps {
     post: {
         id: number,
         owner: string,
+        ownerEns: string,
         timestamp: number,
         text: string
-    }
+    },
+    loading?: true
 }
 
 export default function Post(props: PostProps) {
+    const { library } = useWeb3React<Web3Provider>();
+    const [ post, setPost ] = useState<any>(props.post);
+    const [ loading, setLoading ] = useState<boolean>(props.loading || true);
+
+    useEffect(() => {
+        const getEns = async () => {
+            if (!!library) {
+                try {
+                    const ens = await library.lookupAddress(props.post.owner);
+                    setPost((prevState: any) => {
+                        return {...prevState, ownerEns: ens ?? formatAddress(props.post.owner)}
+                    })
+                } catch (e) {
+                    console.error(e)
+                }
+                setLoading(false);
+            }
+        };
+
+        getEns();
+    })
 
     return (
-        <PostContext.Provider value={props}>
-            <Card>
-                <PostHeader />
-                <PostContent />
-                <PostActions />
-            </Card>
+        <PostContext.Provider value={{post}}>
+            {
+                loading
+                    ?
+                    <Card>
+                        <Loading theme="post" visible={loading} />
+                    </Card>
+                    :
+                    <Card>
+                        <PostHeader />
+                        <PostContent />
+                        <PostActions />
+                    </Card>
+            }
         </PostContext.Provider>
     )
 }
