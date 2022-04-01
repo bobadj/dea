@@ -1,25 +1,30 @@
 import React, {useEffect, useState} from 'react';
 import { useWeb3React } from '@web3-react/core';
 import { Web3Provider } from '@ethersproject/providers';
-import { formatEther } from '@ethersproject/units';
-import { formatAddress } from '../../utils';
+import { formatAddress, injected, walletconnect } from '../../utils';
 import Avatar from '../Avatar'
+import MetaMaskIcon from './meta-mask-icon.svg';
+import WalletConnectIcon from './wallet-connect-icon.svg';
 import './index.css';
 
 export default function UserData() {
-    const { account, library } = useWeb3React<Web3Provider>();
-    const [ gasPrice, setGasPrice ] = useState<string|undefined|number>(0);
+    const { account, library, activate } = useWeb3React<Web3Provider>();
+    const [ ens, setEns ] = useState<string|null|undefined>(null)
 
     useEffect(() => {
-        const getGasPrice = async () => {
+        const getEns = async () => {
             if (!!library) {
-                const gasPrice = await library.getGasPrice();
-                setGasPrice(formatEther(gasPrice) as any)
+                try {
+                    const ens = await library.lookupAddress(account as string);
+                    setEns(ens);
+                } catch (e) {
+                    console.error(e)
+                }
             }
-        }
+        };
 
-        getGasPrice();
-    })
+        getEns();
+    }, [])
 
     const getUserSeed = () => {
         // @ts-ignore
@@ -33,7 +38,7 @@ export default function UserData() {
                     <Avatar seed={getUserSeed()} />
                 </div>
                 <div className="username">
-                    <h3>{formatAddress(account)}</h3>
+                    <h3>{ens ?? formatAddress(account)}</h3>
                 </div>
             </div>
             {
@@ -52,8 +57,15 @@ export default function UserData() {
                     :
                     <ul className="userStatus">
                         <li>
-                            <h4>Gas price</h4>
-                            <span>{gasPrice}</span>
+                            <h4>Connect a wallet</h4>
+                            <button className="loginButton" onClick={() => activate(injected)}>
+                                <img src={MetaMaskIcon} alt="MetaMask" />
+                                MetaMask
+                            </button>
+                            <button className="loginButton" onClick={() => activate(walletconnect)}>
+                                <img src={WalletConnectIcon} alt="WalletConnect" />
+                                WalletConnect
+                            </button>
                         </li>
                     </ul>
             }

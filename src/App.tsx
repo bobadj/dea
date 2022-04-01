@@ -6,47 +6,47 @@ import Feed from './pages/Feed';
 import './App.css';
 
 function getLibrary(provider: any) {
-  const library = new Web3Provider(provider);
-  library.pollingInterval = 12000;
-  return library;
+    const library = new Web3Provider(provider);
+    library.pollingInterval = 12000;
+    return library;
 }
 
 function Page() {
-  const { activate, deactivate } = useWeb3React<Web3Provider>();
+    const { activate, deactivate } = useWeb3React<Web3Provider>();
 
-  useEffect(() => {
-    const loadNetwork = async () => {
-      const isWalletAuthorized = await injected.isAuthorized();
-      if (!isWalletAuthorized) {
-        await activate(network);
-      } else {
-        await activate(injected);
-      }
-    }
-
-    loadNetwork();
-    const { ethereum } = window as any;
-    if (ethereum && ethereum.on) {
-      const accountChangeHandler = (accounts: string[]) => {
-        if (accounts.length < 1) deactivate()
-      }
-      ethereum.on('accountsChanged', accountChangeHandler);
-
-      return () => {
-        if (ethereum.removeListener) {
-          ethereum.removeListener('accountsChanged', accountChangeHandler);
+    useEffect(() => {
+        const loadNetwork = async () => {
+            const isWalletAuthorized = await injected.isAuthorized();
+            if (!isWalletAuthorized) {
+                await activate(network);
+            } else {
+                await activate(injected);
+            }
         }
-      }
-    }
-  }, []);
 
-  return <Feed />
+        loadNetwork();
+        const { ethereum } = window as any;
+        if (ethereum && ethereum.on) {
+            const accountChangeHandler = (accounts: string[]) => {
+                if (accounts.length < 1) deactivate()
+            }
+            ethereum.on('accountsChanged', accountChangeHandler);
+
+            return () => {
+                if (ethereum.removeListener) {
+                    ethereum.removeListener('accountsChanged', accountChangeHandler);
+                }
+            }
+        }
+    }, []);
+
+    return <Feed />
 }
 
 export default function App() {
-  return (
-      <Web3ReactProvider getLibrary={getLibrary}>
-        <Page />
-      </Web3ReactProvider>
-  );
+    return (
+        <Web3ReactProvider getLibrary={getLibrary}>
+            <Page />
+        </Web3ReactProvider>
+    );
 }

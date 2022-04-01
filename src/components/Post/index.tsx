@@ -8,8 +8,8 @@ import { DropDown } from '../DropDown';
 import { formatAddress, siteLookup } from '../../utils'
 import Card from '../Card';
 import Avatar from '../Avatar';
+import Loading from '../Loading';
 import './index.css';
-import Loading from "../Loading";
 
 const ContextInitialValues = {
     post: {

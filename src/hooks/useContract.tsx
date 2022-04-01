@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
 import { useWeb3React } from '@web3-react/core';
 import { Web3Provider } from '@ethersproject/providers';
-import { availableAddresses } from '../utils';
 import { Contract } from '@ethersproject/contracts';
+import { availableAddresses } from '../utils';
 
 export default function useContract(ABI: any, chainId: number|undefined) {
     const { library } = useWeb3React<Web3Provider>();

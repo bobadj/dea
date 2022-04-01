@@ -34,7 +34,7 @@ export default function Feed() {
             if (+latestPostId > currentPostLength-1) {
                 setIsLoading(true);
                 try {
-                    const posts = await contract.fetchPostsRanged(from, 3);
+                    const posts = await contract.fetchPostsRanged(from, 5);
                     setPosts((prevState => {
                         return cleanup ? posts : [...prevState, ...posts]
                     }));
