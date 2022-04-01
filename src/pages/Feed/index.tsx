@@ -29,10 +29,10 @@ export default function Feed() {
     const fetchPosts = async (cleanup: boolean = true) => {
         if (!!contract) {
             let latestPostId = await fetchLastPostId();
-            let loadLimit = 3;
+            let loadLimit = 4;
             let from = (+latestPostId - (cleanup ? 0 : posts.length)) - loadLimit;
             // toDo: load last few items
-            if (from > 0) {
+            if (posts.length < +latestPostId) {
                 setIsLoading(true);
                 try {
                     let fetchedPosts = await contract.fetchPostsRanged(from, loadLimit);
