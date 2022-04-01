@@ -24,7 +24,7 @@ export default function UserData() {
         };
 
         getEns();
-    }, [])
+    }, [account, library])
 
     const getUserSeed = () => {
         // @ts-ignore

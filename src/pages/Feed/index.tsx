@@ -7,7 +7,7 @@ import UserData from '../../components/UserData';
 import UserTransactions from '../../components/UserTransactions';
 import Loading from '../../components/Loading';
 import Card from '../../components/Card';
-import Post from '../../components/Post';
+import { Post } from '../../components/Post';
 import ABI from '../../abis/Vibe.abi.json';
 import './index.css';
 
