@@ -7,6 +7,7 @@ import Loading from '../Loading';
 import PostActions from './PostActions';
 import PostHeader from './PostHeader';
 import PostContent from './PostContent';
+import PostForm from './PostForm';
 import './index.css';
 
 const ContextInitialValues = {
@@ -88,5 +89,6 @@ export {
     Post,
     PostHeader,
     PostContent,
-    PostActions
+    PostActions,
+    PostForm
 }

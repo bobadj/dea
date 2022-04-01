@@ -38,7 +38,7 @@ export default function Avatar(props: AvatarProps) {
         };
 
         getAvatar();
-    }, [])
+    }, [props.seed])
 
     return <img src={avatar} alt="user avatar" />;
 }

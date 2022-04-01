@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { usePostContext } from './index';
+import { usePostContext } from '../index';
 
 interface Caption {
     url: string|undefined,

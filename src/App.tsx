@@ -38,7 +38,7 @@ function Page() {
                 }
             }
         }
-    }, []);
+    }, [activate, deactivate]);
 
     return <Feed />
 }

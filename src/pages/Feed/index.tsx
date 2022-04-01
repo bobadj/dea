@@ -7,12 +7,12 @@ import UserData from '../../components/UserData';
 import UserTransactions from '../../components/UserTransactions';
 import Loading from '../../components/Loading';
 import Card from '../../components/Card';
-import { Post } from '../../components/Post';
+import { Post, PostForm } from '../../components/Post';
 import ABI from '../../abis/Vibe.abi.json';
 import './index.css';
 
 export default function Feed() {
-    const { chainId } = useWeb3React<Web3Provider>();
+    const { chainId, library } = useWeb3React<Web3Provider>();
     const [ isLoading, setIsLoading ] = useState<boolean>(true);
     const [ posts, setPosts ] = useState<[]>([]);
 
@@ -29,14 +29,16 @@ export default function Feed() {
     const fetchPosts = async (cleanup: boolean = true) => {
         if (!!contract) {
             let latestPostId = await fetchLastPostId();
-            const currentPostLength = cleanup ? 0 : posts.length;
-            const from = cleanup ? 0 : currentPostLength;
-            if (+latestPostId > currentPostLength-1) {
+            let loadLimit = 3;
+            let from = (+latestPostId - (cleanup ? 0 : posts.length)) - loadLimit;
+            // toDo: load last few items
+            if (from > 0) {
                 setIsLoading(true);
                 try {
-                    const posts = await contract.fetchPostsRanged(from, 5);
+                    let fetchedPosts = await contract.fetchPostsRanged(from, loadLimit);
+                    fetchedPosts = Array.from(fetchedPosts).reverse();
                     setPosts((prevState => {
-                        return cleanup ? posts : [...prevState, ...posts]
+                        return cleanup ? fetchedPosts : [...prevState, ...fetchedPosts]
                     }));
                 } catch (e) {
                     console.error(e)
@@ -45,6 +47,20 @@ export default function Feed() {
             }
         }
     }
+
+    const submitPostForm = async (value: any) => {
+        if (!!contract && !!library) {
+            try {
+                const signer = contract.connect(library.getSigner());
+                const transaction = await signer.createPost(value);
+                setIsLoading(true);
+                await transaction.wait();
+                await fetchPosts();
+            } catch (e) {
+                console.error(e);
+            }
+        }
+    };
 
     useEffect(() => {
         fetchPosts();
@@ -65,8 +81,12 @@ export default function Feed() {
             </div>
             <div className="postsPanel">
                 <div className="posts">
+                    <PostForm onSubmit={submitPostForm} />
                     {
                         posts
+                            .filter((post: any) => {
+                                return (post.owner || '') !== '0x0000000000000000000000000000000000000000';
+                            })
                             .map((post, i) => {
                                 return <Post key={i} post={post} />
                             })

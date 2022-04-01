@@ -1,0 +1,70 @@
+.postHeader,
+.postForm {
+    display: flex;
+    justify-content: space-between;
+}
+.postForm {
+    flex-wrap: wrap;
+}
+.postHeader img {
+    max-width: 50px;
+    border-radius: 50%;
+}
+.postHeader div.avatarContainer {
+    display: flex;
+}
+.postHeader div.avatarContainer div {
+    margin-left: 15px;
+}
+.postHeader a,
+.postHeader p {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    text-decoration: none;
+    color: inherit;
+}
+.postForm .inputArea,
+.postForm .inputArea textarea {
+    width: 100%;
+    padding: 10px;
+}
+.postForm .inputArea {
+    flex: 1;
+    display: flex;
+}
+.postForm .inputArea textarea,
+.postForm .inputArea textarea:focus,
+.postForm .inputArea textarea:focus-visible {
+    border: 0;
+    box-shadow: none;
+    outline: none;
+    resize: vertical;
+}
+.postForm .postHeader {
+    flex: 0;
+    max-height: 50px;
+    margin-right: 15px;
+}
+.postForm .postActions {
+    flex-basis: 100%;
+}
+.postForm .postActions .postActionContent {
+    float: right;
+}
+.postForm .postActions .postActionContent button {
+    margin-left: auto;
+    background-color: rgb(29, 155, 240);
+    border: 0;
+    box-shadow: none;
+    padding: 10px 15px;
+    color: #fff;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 25px;
+    cursor: pointer;
+}
+.postForm .postActions .postActionContent button.disabled {
+    opacity: 0.5;
+    color: rgb(255, 255, 255);
+}
