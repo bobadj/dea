@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useWeb3React } from '@web3-react/core';
+import { useWeb3React, UnsupportedChainIdError } from '@web3-react/core';
 import { Web3Provider } from '@ethersproject/providers';
 import { formatFixed } from '@ethersproject/bignumber';
 import useContract from "../../hooks/useContract";
@@ -8,13 +8,15 @@ import UserTransactions from '../../components/UserTransactions';
 import Loading from '../../components/Loading';
 import Card from '../../components/Card';
 import { Post, PostForm } from '../../components/Post';
+import NetworkError from '../../components/NetworkError';
 import ABI from '../../abis/Vibe.abi.json';
 import './index.css';
 
 export default function Feed() {
-    const { chainId, library } = useWeb3React<Web3Provider>();
+    const { chainId, library, account, error } = useWeb3React<Web3Provider>();
     const [ isLoading, setIsLoading ] = useState<boolean>(true);
     const [ posts, setPosts ] = useState<[]>([]);
+    const [ isUnsupportedChain, setIsUnsupportedChain ] = useState<boolean>(error instanceof UnsupportedChainIdError);
 
     const contract = useContract(ABI, chainId);
 
@@ -63,13 +65,24 @@ export default function Feed() {
     };
 
     useEffect(() => {
-        fetchPosts();
-    }, [chainId]);
+        if (!isUnsupportedChain) {
+            fetchPosts();
+        }
+        setIsUnsupportedChain(error instanceof UnsupportedChainIdError);
+    }, [chainId, error]);
 
     window.onscroll = async (e) => {
         if (!isLoading && (window.innerHeight + window.scrollY) >= document.body.scrollHeight) {
             fetchPosts(false)
         }
+    }
+
+    if (isUnsupportedChain) {
+        return (
+            <div className="feedPage">
+                <NetworkError />
+            </div>
+        )
     }
 
     return (
@@ -81,7 +94,7 @@ export default function Feed() {
             </div>
             <div className="postsPanel">
                 <div className="posts">
-                    <PostForm onSubmit={submitPostForm} />
+                    { account ? <PostForm onSubmit={submitPostForm} /> : null }
                     {
                         posts
                             .filter((post: any) => {

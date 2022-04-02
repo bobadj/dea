@@ -1,0 +1,10 @@
+.unsupportedNetworkCard {
+    margin: auto;
+}
+.unsupportedNetworkCard .actions {
+    display: flex;
+    flex-direction: column;
+}
+.unsupportedNetworkCard .actions button {
+    margin-top: 10px;
+}

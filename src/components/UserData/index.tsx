@@ -13,7 +13,7 @@ export default function UserData() {
 
     useEffect(() => {
         const getEns = async () => {
-            if (!!library) {
+            if (!!library && !!account) {
                 try {
                     const ens = await library.lookupAddress(account as string);
                     setEns(ens);
