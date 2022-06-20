@@ -1,0 +1,69 @@
+button {
+    cursor: pointer;
+    width: 100%;
+    box-shadow: none;
+    border-radius: 2px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 15px 0;
+    font-size: 15px;
+    margin-top: 10px;
+}
+button.default {
+    color: #ffffff;
+    border: 1px solid rgba(0,123,255,1);
+    background: rgba(0,123,255,1);
+}
+button.rounded {
+    border: 0;
+    box-shadow: none;
+    padding: 10px 15px;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 25px;
+}
+button.secondary {
+    color: #ffffff;
+    border: 1px solid rgba(108, 117, 125, 1);
+    background: rgba(108, 117, 125, 1);
+}
+button.default.outline {
+    background: transparent;
+    border-color: #ddd;
+    color: #333333;
+}
+button.secondary.outline {
+    background: transparent;
+    border-color: rgba(108, 117, 125, 1);
+    color: #333333;
+}
+button.default:focus,
+button.default:hover,
+button.default:active {
+    font-weight: bolder;
+    box-shadow: 0 0 0 .2rem rgba(0,123,255,.5);
+}
+button.secondary:focus,
+button.secondary:hover,
+button.secondary:active {
+    font-weight: bolder;
+    box-shadow: 0 0 0 .2rem rgba(108, 117, 125, .5);
+}
+button.default.outline:focus,
+button.default.outline:hover,
+button.default.outline:active {
+    color: #3765f5;
+}
+button img {
+    border-radius: 0 !important;
+    border: 0 !important;
+    max-width: 30px;
+    height: auto !important;
+    margin-right: 10px;
+}
+button.disabled {
+    pointer-events: none;
+    opacity: 0.5;
+    color: rgb(255, 255, 255);
+}

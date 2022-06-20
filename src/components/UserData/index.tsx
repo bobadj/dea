@@ -1,34 +1,26 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import { useWeb3React } from '@web3-react/core';
 import { Web3Provider } from '@ethersproject/providers';
 import { formatAddress, injected, walletconnect } from '../../utils';
 import Avatar from '../Avatar'
+import Button from '../Button';
 import MetaMaskIcon from './meta-mask-icon.svg';
 import WalletConnectIcon from './wallet-connect-icon.svg';
 import './index.css';
 
-export default function UserData() {
-    const { account, library, activate } = useWeb3React<Web3Provider>();
-    const [ ens, setEns ] = useState<string|null|undefined>(null)
+interface UserDataProps {
+    ens?: string|undefined|null,
+    address?: string|undefined|null,
+    balance?: number|string|undefined|null
+}
 
-    useEffect(() => {
-        const getEns = async () => {
-            if (!!library && !!account) {
-                try {
-                    const ens = await library.lookupAddress(account as string);
-                    setEns(ens);
-                } catch (e) {
-                    console.error(e)
-                }
-            }
-        };
-
-        getEns();
-    }, [account, library])
+export default function UserData(props: UserDataProps) {
+    const { ens, address, balance } = props;
+    const { account, activate } = useWeb3React<Web3Provider>();
 
     const getUserSeed = () => {
         // @ts-ignore
-        return account ?? navigator.buildID;
+        return address ?? navigator.buildID;
     };
 
     return (
@@ -38,7 +30,7 @@ export default function UserData() {
                     <Avatar seed={getUserSeed()} />
                 </div>
                 <div className="username">
-                    <h3>{ens ?? formatAddress(account)}</h3>
+                    <h3>{ens ?? formatAddress(address)}</h3>
                 </div>
             </div>
             {
@@ -47,7 +39,7 @@ export default function UserData() {
                     <ul className="userStatus">
                         <li>
                             <h4>Balance</h4>
-                            <span>3,1k</span>
+                            <span>{balance}</span>
                         </li>
                         <li>
                             <h4>Total sponsors</h4>
@@ -58,14 +50,18 @@ export default function UserData() {
                     <ul className="userStatus">
                         <li>
                             <h4>Connect a wallet</h4>
-                            <button className="loginButton" onClick={() => activate(injected)}>
-                                <img src={MetaMaskIcon} alt="MetaMask" />
-                                MetaMask
-                            </button>
-                            <button className="loginButton" onClick={() => activate(walletconnect)}>
-                                <img src={WalletConnectIcon} alt="WalletConnect" />
-                                WalletConnect
-                            </button>
+                            <Button onClick={() => activate(injected)} theme="outline">
+                                <>
+                                    <img src={MetaMaskIcon} alt="MetaMask" />
+                                    MetaMask
+                                </>
+                            </Button>
+                            <Button onClick={() => activate(walletconnect)} theme="outline">
+                                <>
+                                    <img src={WalletConnectIcon} alt="WalletConnect" />
+                                    WalletConnect
+                                </>
+                            </Button>
                         </li>
                     </ul>
             }

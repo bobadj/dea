@@ -1,11 +1,12 @@
 import React from 'react';
 import { SUPPORTED_CHAINS } from '../../utils';
 import Card from '../Card';
+import Button from '../Button';
 import './index.css';
 
 export default function NetworkError() {
 
-    const changeNetwork = async (chainId: number) => {
+    const changeNetwork = async (chainId: any) => {
         const { ethereum } = window as any;
         if (!!ethereum) {
             try {
@@ -23,12 +24,15 @@ export default function NetworkError() {
         <Card className="unsupportedNetworkCard">
             <p>You are using unsupported network!</p>
             <div className="actions">
-                <button onClick={() => changeNetwork(SUPPORTED_CHAINS.Ropsten)}>
-                    Change to Ropsten
-                </button>
-                <button onClick={() => changeNetwork(SUPPORTED_CHAINS.Rinkeby)}>
-                    Change to Rinkeby
-                </button>
+                {
+                    Object.keys(SUPPORTED_CHAINS)
+                        .map((chain: string) => {
+                            // @ts-ignore
+                            return <Button key={`network_change_${chain}`} onClick={() => changeNetwork(SUPPORTED_CHAINS[chain])} theme="outline">
+                                <span>Change to {chain}</span>
+                            </Button>
+                        })
+                }
             </div>
             <p className="help-text">
                 You may need to switch network manually.

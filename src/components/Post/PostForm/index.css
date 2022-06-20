@@ -52,19 +52,3 @@
 .postForm .postActions .postActionContent {
     float: right;
 }
-.postForm .postActions .postActionContent button {
-    margin-left: auto;
-    background-color: rgb(29, 155, 240);
-    border: 0;
-    box-shadow: none;
-    padding: 10px 15px;
-    color: #fff;
-    font-size: 18px;
-    font-weight: bold;
-    border-radius: 25px;
-    cursor: pointer;
-}
-.postForm .postActions .postActionContent button.disabled {
-    opacity: 0.5;
-    color: rgb(255, 255, 255);
-}

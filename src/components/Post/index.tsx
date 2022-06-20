@@ -84,11 +84,11 @@ function Post(props: PostProps) {
     )
 }
 
+Post.Header = PostHeader;
+Post.Content = PostContent;
+Post.Actions = PostActions;
+Post.Form = PostForm;
 export {
     usePostContext,
     Post,
-    PostHeader,
-    PostContent,
-    PostActions,
-    PostForm
 }

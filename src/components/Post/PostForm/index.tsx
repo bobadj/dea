@@ -3,6 +3,7 @@ import { useWeb3React } from '@web3-react/core';
 import { Web3Provider } from '@ethersproject/providers';
 import Card from '../../Card';
 import Avatar from '../../Avatar';
+import Button from '../../Button';
 import './index.css'
 
 interface PostFormProps {
@@ -26,7 +27,9 @@ export default function PostForm(props: PostFormProps) {
                 </div>
                 <div className="postActions">
                     <div className="postActionContent">
-                        <button onClick={() => props.onSubmit(postContent)} className={!postContent ? 'disabled' : ''}>Post</button>
+                        <Button onClick={() => props.onSubmit(postContent)} theme="rounded" disabled={!postContent}>
+                            Post
+                        </Button>
                     </div>
                 </div>
             </div>

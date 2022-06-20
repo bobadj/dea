@@ -2,12 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { useWeb3React, UnsupportedChainIdError } from '@web3-react/core';
 import { Web3Provider } from '@ethersproject/providers';
 import { formatFixed } from '@ethersproject/bignumber';
-import useContract from "../../hooks/useContract";
+import { useContract, useAddressLookup } from '../../hooks';
 import UserData from '../../components/UserData';
 import UserTransactions from '../../components/UserTransactions';
 import Loading from '../../components/Loading';
 import Card from '../../components/Card';
-import { Post, PostForm } from '../../components/Post';
+import { Post } from '../../components/Post';
 import NetworkError from '../../components/NetworkError';
 import ABI from '../../abis/Vibe.abi.json';
 import './index.css';
@@ -19,6 +19,7 @@ export default function Feed() {
     const [ isUnsupportedChain, setIsUnsupportedChain ] = useState<boolean>(error instanceof UnsupportedChainIdError);
 
     const contract = useContract(ABI, chainId);
+    const userLookup = useAddressLookup(account);
 
     const fetchLastPostId = async () => {
         if (!!contract) {
@@ -33,6 +34,10 @@ export default function Feed() {
             let latestPostId = await fetchLastPostId();
             let loadLimit = 4;
             let from = (+latestPostId - (cleanup ? 0 : posts.length)) - loadLimit;
+            if (from < 0) {
+                loadLimit = +latestPostId - posts.length;
+                from = 0;
+            }
             // toDo: load last few items
             if (posts.length < +latestPostId) {
                 setIsLoading(true);
@@ -89,12 +94,12 @@ export default function Feed() {
         <div className="feedPage">
             <div className="leftPanel">
                 <Card>
-                    <UserData />
+                    <UserData {...userLookup} />
                 </Card>
             </div>
             <div className="postsPanel">
                 <div className="posts">
-                    { account ? <PostForm onSubmit={submitPostForm} /> : null }
+                    { account ? <Post.Form onSubmit={submitPostForm} /> : null }
                     {
                         posts
                             .filter((post: any) => {

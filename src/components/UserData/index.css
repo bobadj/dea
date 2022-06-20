@@ -27,32 +27,3 @@
     color: #000000;
     font-size: 18px;
 }
-.userStatus button.loginButton {
-    box-shadow: none;
-    border: 1px solid #ddd;
-    border-radius: 2px;
-    background: transparent;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 15px 0;
-    font-size: 15px;
-    margin-top: 10px;
-    cursor: pointer;
-}
-.userStatus button.loginButton:hover,
-.userStatus button.loginButton:focus,
-.userStatus button.loginButton:active {
-    border-color: rgba(0,123,255,.5);
-    color: #3765f5;
-    font-weight: bolder;
-    box-shadow: 0 0 0 .2rem rgba(0,123,255,.5);
-}
-.userStatus button.loginButton img {
-    border-radius: 0;
-    border: 0;
-    max-width: 30px;
-    height: auto;
-    margin-right: 10px;
-}
